@@ -101,6 +101,7 @@ class StockSymbol:
         self.date, self.open, self.high, self.low, self.close = data
 
 
+
 async def fetch(session, symbol):
     print(symbol.yf_url)
     async with session.get(symbol.yf_url) as resp:
@@ -139,12 +140,12 @@ def create_stock_prices_layout(symbols: list[StockSymbol]):
 
 async def main():
     ######### create GUI #########
-    def create_main_layout():
-        return [
-            [sg.Text('Stock Symbols:'), sg.Input(metadata="comma separated symbols",key='symbols')],
+    main_layout = [
+            [sg.Text('Stock Symbols:'), sg.Input(metadata="comma separated symbols",key='symbols', do_not_clear=False)],
             [sg.Text('     enter multiple symbols as a comma separated list')],
             [sg.Button('Submit', bind_return_key=True), sg.Cancel()]
         ]
+    main_window = sg.Window('Stock Price Data', main_layout)
 
     headers = {"user-agent": "Mozilla/5.0"}
     cur_date = datetime.utcnow()
@@ -157,11 +158,9 @@ async def main():
 
     async with aiohttp.ClientSession(headers=headers) as session:
         while True:
-            main_window = sg.Window('Stock Price Data', create_main_layout())
             event, value = main_window.read()
             if event in (sg.WIN_CLOSED, 'Cancel'):
                 break
-            main_window.close()
 
             symbols = set([s.strip().upper() for s in value['symbols'].split(',')]) #remove duplicates
             symbols = [StockSymbol(s) for s in symbols if s] # remove empty strings
