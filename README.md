@@ -1,16 +1,17 @@
 # stock_ticker_scraper
 a program that takes in stock ticker symbols and returns the daily open, close, high and low prices, as reported by yahoo finance
 
-# requirements
+# Requirements
 Python 3.7+ is needed. It has only been tested on Windows 10, but should in theory work on MacOS and linux environments.
 
-The program relies on 4 Python Modules:
+The program relies on 5 Python Modules:
 - PySimpleGUI
 - aiohttp
 - asyncio
 - BeautifulSoup
+- pytest
 
-# to run
+# Running the program
 create a new python virtual environment and activate it.
 
 install the requirements 
@@ -26,13 +27,11 @@ A pop-up will appear with space to enter stock ticker symbols
 # How it works
 The interface is implemented as a desktop program, using the PySimpleGui package. When invoked, the program brings up a simple window with an input box for typing in a comma separated list of stock ticker symbols.
 
-After the symbols are entered by the user, the program parses the individual symbols and creates URLs for each symbol.
+After the symbols are entered by the user, the program parses the individual symbols from the input string and creates URLs for each symbol.
 
 Asynchronous calls are made to each URL, and the return HTML is saved.
 
 The html strings are then parsed and the most recent stock price values are extracted. Once all stock prices are extracted for every ticker, a new pop-up window appears and the tickers and associated prices are displayed to the user.
-
-If the current date occurs on a weekend, a temporary pop-up window appears to alert the user the most recent date the stock market is openes will be used.
 
 Once the user closes the window with the stock prices displayed, they can choose to enter more ticker symbols or exit the program.
 
@@ -70,7 +69,7 @@ The program "logs" with print statements. A proper logging mechanism should be u
 The program has been tested on a windows machine only. It should work on other platforms, but has not been teted.
 
 # Architecture
-The program is written in a layered style. the top layer consists of the GUI the user interacts with. The lower layer consists of the asynchronous calls to yahoo finance.
+The program is written in a basic layered style. the top layer consists of the GUI the user interacts with. The lower layer consists of the asynchronous calls to yahoo finance and associated html parsing.
 
 An object oriented style is used to keep track of all data related to each stock ticker entered by the user. A stock ticker object contains a number of attributes:
 - symbol: string value correlated to the symbol used by the stock exchange on which the ticker is listed.
